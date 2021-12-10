@@ -1,8 +1,11 @@
 from django.http import HttpResponse
 
+from .models import Bb
+
 
 def index(request):
-    print("="*30)
-    print(request)
-    print("="*30)
-    return HttpResponse("<h1>🦄</h1><p>Here will be BBOARD soon!<p><h2>🐉</h2>")
+    s = "Объявления 🦄\r\n\r\n"
+    for bb in Bb.objects.order_by('-published'):
+        s += bb.title + '\r\n' + bb.content + '\r\n\r\n'
+
+    return HttpResponse(s + "🐉", content_type='text/plain; charset=utf-8')
