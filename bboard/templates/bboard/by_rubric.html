@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>🦄 :: Доска объявлений</title>
+    <title>{{ current_rubric.name }} :: Доска объявлений</title>
 </head>
 <body>
     <h1>🐉Объявления🦄</h1>
+    <h2>Рубрика: {{ current_rubric.name }}</h2>
     <div>
         <a href="/bboard/">Главная</a>
         {% for rubric in rubrics %}
