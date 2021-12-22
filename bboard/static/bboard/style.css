@@ -8,7 +8,7 @@ header h1 {
 nav {
     text-transform: capitalize;
     font-size: 16pt;
-    width: 150px;
+    width: 170px;
     float: left;
 }
 
@@ -18,5 +18,5 @@ nav a {
 }
 
 section {
-    margin-left: 170px;
+    margin-left: 180px;
 }
