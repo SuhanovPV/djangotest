@@ -39,6 +39,9 @@ class Bb(models.Model):
         if errors:
             raise ValidationError(errors)
 
+    def __str__(self):
+        return self.title
+
     class Meta:
         verbose_name_plural = "Объявления"
         verbose_name = "Объявление"
