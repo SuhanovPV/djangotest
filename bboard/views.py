@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.views.generic.edit import CreateView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.db.models import Count
+from django.http import HttpResponseRedirect
 
 from .models import Bb, Rubric
 from .forms import BbForm
@@ -31,3 +32,20 @@ def by_rubric(request, rubric_id):
     current_rubric = Rubric.objects.get(pk=rubric_id)
     context = {'bbs': bbs, 'rubrics': rubrics, 'current_rubric': current_rubric}
     return render(request, 'bboard/by_rubric.html', context)
+
+
+def add(request):
+    bbf = BbForm()
+    rubrics = Rubric.objects.annotate(Count('bb'))
+    context = {'form': bbf, 'rubrics': rubrics}
+    return render(request, 'bboard/create.html', context)
+
+
+def add_save(request):
+    bbf = BbForm(request.POST)
+    if bbf.is_valid():
+        bbf.save()
+        return HttpResponseRedirect(reverse('by_rubric', kwargs={'rubric_id': bbf.cleaned_data['rubric'].pk}))
+    else:
+        context = {'form': bbf}
+        return render(request, 'bboard/create.html', context)
