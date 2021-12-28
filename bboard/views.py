@@ -1,11 +1,33 @@
 from django.shortcuts import render
+from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy, reverse, resolve
 from django.db.models import Count
 from django.http import HttpResponseRedirect
 
 from .models import Bb, Rubric
 from .forms import BbForm
+
+
+class BbView(TemplateView):
+    template_name = 'bboard/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['bbs'] = Bb.objects.all()
+        context['rubrics'] = Rubric.objects.annotate(Count('bb'))
+        return context
+
+
+class BbByRubricView(TemplateView):
+    template_name = 'bboard/by_rubric.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['bbs'] = Bb.objects.filter(rubric=context['rubric_id'])
+        context['rubrics'] = Rubric.objects.annotate(Count('bb'))
+        context['current_rubric'] = Rubric.objects.get(pk=context['rubric_id'])
+        return context
 
 
 class BbCreateView(CreateView):
