@@ -34,18 +34,17 @@ def by_rubric(request, rubric_id):
     return render(request, 'bboard/by_rubric.html', context)
 
 
-def add(request):
-    bbf = BbForm()
-    rubrics = Rubric.objects.annotate(Count('bb'))
-    context = {'form': bbf, 'rubrics': rubrics}
-    return render(request, 'bboard/create.html', context)
-
-
 def add_save(request):
-    bbf = BbForm(request.POST)
-    if bbf.is_valid():
-        bbf.save()
-        return HttpResponseRedirect(reverse('by_rubric', kwargs={'rubric_id': bbf.cleaned_data['rubric'].pk}))
+    rubrics = Rubric.objects.annotate(Count('bb'))
+    if request.method == 'POST':
+        bbf = BbForm(request.POST)
+        if bbf.is_valid():
+            bbf.save()
+            return HttpResponseRedirect(reverse('by_rubric', kwargs={'rubric_id': bbf.cleaned_data['rubric'].pk}))
+        else:
+            context = {'form': bbf, 'rubrics': rubrics}
+            return render(request, 'bboard/create.html', context)
     else:
-        context = {'form': bbf}
+        bbf = BbForm()
+        context = {'form': bbf, 'rubrics': rubrics}
         return render(request, 'bboard/create.html', context)
