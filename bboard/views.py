@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
+from django.views.generic.list import ListView
 from django.urls import reverse_lazy, reverse, resolve
 from django.db.models import Count
 from django.http import HttpResponseRedirect
@@ -20,14 +21,17 @@ class BbView(TemplateView):
         return context
 
 
-class BbByRubricView(TemplateView):
+class BbByRubricView(ListView):
     template_name = 'bboard/by_rubric.html'
+    context_object_name = 'bbs'
+
+    def get_queryset(self):
+        return Bb.objects.filter(rubric=self.kwargs['rubric_id'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['bbs'] = Bb.objects.filter(rubric=context['rubric_id'])
         context['rubrics'] = Rubric.objects.annotate(Count('bb'))
-        context['current_rubric'] = Rubric.objects.get(pk=context['rubric_id'])
+        context['current_rubric'] = Rubric.objects.get(pk=self.kwargs['rubric_id'])
         return context
 
 
