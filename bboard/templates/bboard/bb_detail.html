@@ -8,4 +8,5 @@
 <p>{{bb.content}}</p>
 <p>Цена: {{bb.price}}</p>
 <a href="{% url 'update' pk=bb.pk %}">Изменить</a>
+<a href="{% url 'delete' pk=bb.pk %}">Удалить</a>
 {% endblock %}
