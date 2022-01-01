@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, FormView
+from django.views.generic.edit import CreateView, FormView, UpdateView
 from django.views.generic.list import ListView
 from django.urls import reverse_lazy, reverse, resolve
 from django.db.models import Count
@@ -74,6 +74,18 @@ class BbCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['rubrics'] = Rubric.objects.annotate(Count('bb'))
+        return context
+
+
+class BbUpdateView(UpdateView):
+    template_name = 'bboard/update.html'
+    model = Bb
+    form_class = BbForm
+    success_url = '/bboard/detail/{id}'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
         context['rubrics'] = Rubric.objects.annotate(Count('bb'))
         return context
 
