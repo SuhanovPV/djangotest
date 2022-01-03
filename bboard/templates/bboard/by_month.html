@@ -1,0 +1,22 @@
+{% extends "layout/basic.html" %}
+
+{% block content %}
+    <div>
+        <h2>Объявления за {{month.month}}.{{ month.year}}</h2>
+    </div>
+    <div class="date">
+        <p>Дни:
+            {% for d in date_list %}
+                <span><a href="{% url 'by_day' year=d.year month=d.month day=d.day %}">{{ d.day }}</a></span>
+            {% endfor %}
+        </p>
+    </div>
+    {% for bb in bbs %}
+        <div>
+            <h2><a href="{% url 'detail' pk=bb.pk %}">{{ bb.title_and_price }}</a></h2>
+            <p>{{ bb.content }}</p>
+            <p>{{ bb.published|date:"d.m.Y H:i:s" }}</p>
+            <p><a href="{% url 'update' pk=bb.pk %}">Изменить</a></p>
+        </div>
+    {% endfor %}
+{% endblock %}

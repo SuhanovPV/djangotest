@@ -20,3 +20,8 @@ nav a {
 section {
     margin-left: 180px;
 }
+
+.date span{
+    font-size: 14pt;
+    margin-right: 10px;
+}

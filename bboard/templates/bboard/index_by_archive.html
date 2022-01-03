@@ -1,0 +1,19 @@
+{% extends "layout/basic.html" %}
+
+{% block content %}
+    <div class="date">
+        <p>Годы:
+        {% for d in date_list %}
+            <span><a href="{% url 'by_year' year=d.year %}">{{ d.year }}</a></span>
+        {% endfor %}
+        </p>
+    </div>
+    {% for bb in bbs %}
+        <div>
+            <h2><a href="{% url 'detail' pk=bb.pk %}">{{ bb.title_and_price }}</a></h2>
+            <p>{{ bb.content }}</p>
+            <p>{{ bb.published|date:"d.m.Y H:i:s" }}</p>
+            <p><a href="{% url 'update' pk=bb.pk %}">Изменить</a></p>
+        </div>
+    {% endfor %}
+{% endblock %}
